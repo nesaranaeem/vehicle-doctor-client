@@ -3,22 +3,19 @@ import { Link } from "react-router-dom";
 import loginImage from "../../assets/images/login/login.svg";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 import { AuthContext } from "../../contexts/AuthProvider/AuthProvider";
-const Login = () => {
-  const { loginUserEmailPassword } = useContext(AuthContext);
-
-  const handleLogin = (event) => {
+const SignUp = () => {
+  const { createUser } = useContext(AuthContext);
+  const handleSignUp = (event) => {
     event.preventDefault();
     const form = event.target;
     const email = form.email.value;
     const password = form.password.value;
-    loginUserEmailPassword(email, password)
+    createUser(email, password)
       .then((result) => {
         const user = result.user;
-        console.log(user.email);
+        console.log(user);
       })
-      .catch((err) => {
-        console.error(err.message);
-      });
+      .catch((err) => console.error(err));
   };
   return (
     <div className="hero w-full">
@@ -27,19 +24,35 @@ const Login = () => {
           <img className="w-3/4" src={loginImage} alt="" />
         </div>
         <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100 py-20">
-          <form className="card-body" onSubmit={handleLogin}>
+          <form className="card-body" onSubmit={handleSignUp}>
             <div className="form-control">
-              <h1 className="text-5xl font-bold text-center">Login now!</h1>
-              <label className="label">
-                <span className="label-text">Email</span>
-              </label>
-              <input
-                name="email"
-                type="text"
-                placeholder="email"
-                className="input input-bordered"
-                required
-              />
+              <h1 className="text-5xl font-bold text-center pb-3">
+                SignUp now!
+              </h1>
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Name</span>
+                </label>
+                <input
+                  name="name"
+                  type="text"
+                  placeholder="name"
+                  className="input input-bordered"
+                  required
+                />
+              </div>
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Email</span>
+                </label>
+                <input
+                  name="email"
+                  type="text"
+                  placeholder="email"
+                  className="input input-bordered"
+                  required
+                />
+              </div>
             </div>
             <div className="form-control">
               <label className="label">
@@ -52,14 +65,25 @@ const Login = () => {
                 className="input input-bordered"
                 required
               />
+            </div>
+            <div className="form-control">
               <label className="label">
-                <a href="#" className="label-text-alt link link-hover">
-                  Forgot password?
-                </a>
+                <span className="label-text">Confirm Password</span>
               </label>
+              <input
+                name="confirmPassword"
+                type="password"
+                placeholder="confirm password"
+                className="input input-bordered"
+                required
+              />
             </div>
             <div className="form-control mt-6">
-              <input type="submit" className="btn btn-primary" value="Login" />
+              <input
+                type="submit"
+                className="btn btn-primary"
+                value="Sign Up"
+              />
             </div>
           </form>
           <div className="flex flex-col items-center pb-8 px-8">
@@ -74,9 +98,9 @@ const Login = () => {
             </button>
           </div>
           <p className="text-center">
-            New to VehicleDoctor?{" "}
-            <Link to="/signup" className="text-orange-600 font-bold">
-              Sign Up
+            Already have an Account?{" "}
+            <Link to="/login" className="text-orange-600 font-bold">
+              LogIn
             </Link>{" "}
           </p>
         </div>
@@ -85,4 +109,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignUp;

@@ -4,7 +4,10 @@ import logo from "../assets/logo.svg";
 const menuItems = (
   <>
     <li>
-      <Link to="/">Menu 1</Link>
+      <Link to="/">Home</Link>
+    </li>
+    <li>
+      <Link to="/login">Login</Link>
     </li>
   </>
 );
