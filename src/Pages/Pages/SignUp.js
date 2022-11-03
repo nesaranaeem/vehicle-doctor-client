@@ -4,22 +4,24 @@ import loginImage from "../../assets/images/login/login.svg";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 import { AuthContext } from "../../contexts/AuthProvider/AuthProvider";
 const SignUp = () => {
-  const { createUser } = useContext(AuthContext);
+  const { createUser, updateName } = useContext(AuthContext);
   const handleSignUp = (event) => {
     event.preventDefault();
     const form = event.target;
+    const name = form.name.value;
     const email = form.email.value;
     const password = form.password.value;
     createUser(email, password)
       .then((result) => {
         const user = result.user;
+        updateName(name);
         console.log(user);
       })
       .catch((err) => console.error(err));
   };
   return (
     <div className="hero w-full">
-      <div className="hero-content grid gap-10 my-20 md:grid-cols-2">
+      <div className="hero-content grid justify-items-center gap-10 my-20 md:grid-cols-2">
         <div className="text-center lg:text-left">
           <img className="w-3/4" src={loginImage} alt="" />
         </div>

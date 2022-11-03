@@ -22,7 +22,7 @@ const Login = () => {
   };
   return (
     <div className="hero w-full">
-      <div className="hero-content grid gap-10 my-20 md:grid-cols-2">
+      <div className="hero-content grid justify-items-center gap-10 my-20 md:grid-cols-2">
         <div className="text-center lg:text-left">
           <img className="w-3/4" src={loginImage} alt="" />
         </div>
