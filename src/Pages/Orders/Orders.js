@@ -38,6 +38,26 @@ const Orders = () => {
         });
     }
   };
+  const handleOrderStatus = (id) => {
+    fetch(`http://localhost:5000/orders/${id}`, {
+      method: "PATCH",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ status: "Approved" }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        if (data.modifiedCount) {
+          const remaining = orders.filter((odr) => odr._id !== id);
+          const approving = orders.find((odr) => odr._id === id);
+          approving.status = "Approved";
+          const newOrders = [approving, ...remaining];
+          setOrders(newOrders);
+        }
+      });
+  };
   return (
     <div>
       <h3>Total {orders.length} orders</h3>
@@ -45,26 +65,25 @@ const Orders = () => {
         <table className="table w-full">
           <thead>
             <tr>
-              <th>
-                <label>
-                  <input type="checkbox" className="checkbox" />
-                </label>
-              </th>
+              <th></th>
               <th>Name</th>
               <th>Job</th>
               <th>Favorite Color</th>
-              <th></th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
             {orders.length === 0 ? (
-              <h2 className="p-6">No orders made yet</h2>
+              <tr>
+                <td className="p-6">No orders made yet</td>
+              </tr>
             ) : (
               orders.map((order) => (
                 <OrderItems
                   key={order._id}
                   order={order}
                   handleDelete={handleDelete}
+                  handleOrderStatus={handleOrderStatus}
                 ></OrderItems>
               ))
             )}

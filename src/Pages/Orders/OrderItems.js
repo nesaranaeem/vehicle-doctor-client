@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from "react";
-const OrderItems = ({ order, handleDelete }) => {
-  const { _id, serviceName, price, email, customer, phoneNumber, service } =
-    order;
+const OrderItems = ({ order, handleDelete, handleOrderStatus }) => {
+  const {
+    _id,
+    serviceName,
+    price,
+    email,
+    customer,
+    phoneNumber,
+    service,
+    status,
+  } = order;
   const [serviceDetails, setServiceDetails] = useState({});
   const { img } = serviceDetails;
 
@@ -10,7 +18,6 @@ const OrderItems = ({ order, handleDelete }) => {
       .then((res) => res.json())
       .then((result) => setServiceDetails(result));
   }, [service]);
-  console.log(serviceDetails);
   return (
     <tr>
       <th>
@@ -56,7 +63,12 @@ const OrderItems = ({ order, handleDelete }) => {
       </td>
       <td>${price}</td>
       <th>
-        <button className="btn btn-ghost btn-xs">details</button>
+        <button
+          onClick={() => handleOrderStatus(_id)}
+          className="btn btn-ghost btn-xs"
+        >
+          {status ? status : "Pending"}
+        </button>
       </th>
     </tr>
   );
