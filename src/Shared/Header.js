@@ -10,6 +10,9 @@ const Header = () => {
       <li>
         <Link to="/">Home</Link>
       </li>
+      <li>
+        <Link to="/shop">Shop</Link>
+      </li>
       {user?.email ? (
         <li>
           <Link to="/orders">Orders</Link>
