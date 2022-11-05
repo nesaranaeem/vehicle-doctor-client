@@ -1,11 +1,15 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import loginImage from "../../assets/images/login/login.svg";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 import { AuthContext } from "../../contexts/AuthProvider/AuthProvider";
+import { GoogleAuthProvider } from "firebase/auth";
+import { toast } from "react-toastify";
 const Login = () => {
-  const { loginUserEmailPassword } = useContext(AuthContext);
-
+  const { loginUserEmailPassword, googleLogin } = useContext(AuthContext);
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+  const navigate = useNavigate();
   const handleLogin = (event) => {
     event.preventDefault();
     const form = event.target;
@@ -15,9 +19,60 @@ const Login = () => {
       .then((result) => {
         const user = result.user;
         console.log(user.email);
+        toast("Login Success", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        navigate(from, { replace: true });
       })
       .catch((err) => {
         console.error(err.message);
+        toast.error(err.message, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      });
+  };
+  const provider = new GoogleAuthProvider();
+  const handelGoogleLogin = () => {
+    googleLogin(provider)
+      .then((result) => {
+        toast("Login Success", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        navigate(from, { replace: true });
+      })
+      .catch((error) => {
+        console.error(error);
+        toast.error("Login Error", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       });
   };
   return (
@@ -63,7 +118,7 @@ const Login = () => {
             </div>
           </form>
           <div className="flex flex-col items-center pb-8 px-8">
-            <button className="btn  btn-primary ">
+            <button className="btn  btn-primary" onClick={handelGoogleLogin}>
               <FaGoogle className="mr-2" />
               Login with Google
             </button>

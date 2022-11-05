@@ -59,7 +59,15 @@ const Header = () => {
         <ul className="menu menu-horizontal p-0">{menuItems}</ul>
       </div>
       <div className="navbar-end">
-        <a className="btn">Get started</a>
+        {user?.uid ? (
+          <Link to="/account" className="btn">
+            My Account
+          </Link>
+        ) : (
+          <Link to="/login" className="btn">
+            Get started
+          </Link>
+        )}
       </div>
     </div>
   );
