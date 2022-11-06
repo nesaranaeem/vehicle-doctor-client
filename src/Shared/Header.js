@@ -4,7 +4,8 @@ import logo from "../assets/logo.svg";
 import { AuthContext } from "../contexts/AuthProvider/AuthProvider";
 
 const Header = () => {
-  const { user } = useContext(AuthContext);
+  const { user, logOut } = useContext(AuthContext);
+
   const menuItems = (
     <>
       <li>
@@ -24,6 +25,13 @@ const Header = () => {
       )}
     </>
   );
+  const handleLogOut = () => {
+    logOut()
+      .then(() => {})
+      .catch((error) => {
+        console.error(error);
+      });
+  };
   return (
     <div className="h-20 mb-8 pt-8 navbar bg-base-100">
       <div className="navbar-start font-semibold">
@@ -60,9 +68,39 @@ const Header = () => {
       </div>
       <div className="navbar-end">
         {user?.uid ? (
-          <Link to="/account" className="btn">
-            My Account
-          </Link>
+          <>
+            <div className="dropdown dropdown-hover">
+              <label tabIndex={0} className="btn m-1">
+                My Account
+              </label>
+              <ul
+                tabIndex={0}
+                className="dropdown-content menu p-2 shadow bg-base-100 rounded-box"
+              >
+                <div className="w-8 h-8 rounded-full">
+                  <img
+                    src={user?.photoURL}
+                    alt=""
+                    className="rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 mb-8"
+                  />
+                </div>
+                <li>
+                  <Link to="/orders">Orders</Link>
+                </li>
+                <li>
+                  <Link to="/profile">Profile</Link>
+                </li>
+                <li>
+                  <button
+                    onClick={handleLogOut}
+                    className="btn btn-sm hover:btn-accent text-white"
+                  >
+                    Logout
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </>
         ) : (
           <Link to="/login" className="btn">
             Get started

@@ -123,7 +123,7 @@ const Login = () => {
               Login with Google
             </button>
             <p className="text-xl">Or</p>
-            <button className="btn">
+            <button className="btn" disabled>
               <FaGithub className="mr-2" />
               Login with GitHub
             </button>

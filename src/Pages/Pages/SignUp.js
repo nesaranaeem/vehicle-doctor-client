@@ -1,23 +1,88 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import loginImage from "../../assets/images/login/login.svg";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 import { AuthContext } from "../../contexts/AuthProvider/AuthProvider";
+import { toast } from "react-toastify";
+import { GoogleAuthProvider } from "firebase/auth";
 const SignUp = () => {
-  const { createUser, updateName } = useContext(AuthContext);
+  const { createUser, updateName, googleLogin, setUser } =
+    useContext(AuthContext);
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+  const navigate = useNavigate();
   const handleSignUp = (event) => {
     event.preventDefault();
     const form = event.target;
     const name = form.name.value;
+    const photoURL = form.photo.value;
     const email = form.email.value;
     const password = form.password.value;
     createUser(email, password)
       .then((result) => {
         const user = result.user;
-        updateName(name);
         console.log(user);
+        form.reset();
+
+        // Update Name
+        updateName(name, photoURL).then(() => {
+          setUser({ ...user, displayName: name, photoURL });
+        });
+        toast("Signup Success", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+
+        navigate(from, { replace: true });
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        toast.error(err.message, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      });
+  };
+  const provider = new GoogleAuthProvider();
+  const handelGoogleLogin = () => {
+    googleLogin(provider)
+      .then((result) => {
+        toast("Signup Success", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        navigate(from, { replace: true });
+      })
+      .catch((error) => {
+        console.error(error);
+        toast.error("error", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      });
   };
   return (
     <div className="hero w-full">
@@ -39,6 +104,19 @@ const SignUp = () => {
                   name="name"
                   type="text"
                   placeholder="name"
+                  className="input input-bordered"
+                  required
+                />
+              </div>
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Photo URL</span>
+                </label>
+                <input
+                  defaultValue="https://images.unsplash.com/photo-1598589290625-9b04630ec5d1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
+                  name="photo"
+                  type="text"
+                  placeholder="photo"
                   className="input input-bordered"
                   required
                 />
@@ -68,7 +146,7 @@ const SignUp = () => {
                 required
               />
             </div>
-            <div className="form-control">
+            {/* <div className="form-control">
               <label className="label">
                 <span className="label-text">Confirm Password</span>
               </label>
@@ -79,7 +157,7 @@ const SignUp = () => {
                 className="input input-bordered"
                 required
               />
-            </div>
+            </div> */}
             <div className="form-control mt-6">
               <input
                 type="submit"
@@ -89,12 +167,12 @@ const SignUp = () => {
             </div>
           </form>
           <div className="flex flex-col items-center pb-8 px-8">
-            <button className="btn  btn-primary ">
+            <button className="btn  btn-primary" onClick={handelGoogleLogin}>
               <FaGoogle className="mr-2" />
               Login with Google
             </button>
             <p className="text-xl">Or</p>
-            <button className="btn">
+            <button className="btn" disabled>
               <FaGithub className="mr-2" />
               Login with GitHub
             </button>

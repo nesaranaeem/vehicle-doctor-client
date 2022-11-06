@@ -14,7 +14,7 @@ const OrderItems = ({ order, handleDelete, handleOrderStatus }) => {
   const { img } = serviceDetails;
 
   useEffect(() => {
-    fetch(`http://localhost:5000/service/${service}`)
+    fetch(`https://vehicle-doctor-server.vercel.app/service/${service}`)
       .then((res) => res.json())
       .then((result) => setServiceDetails(result));
   }, [service]);

@@ -3,19 +3,21 @@ import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../contexts/AuthProvider/AuthProvider";
 import { toast } from "react-toastify";
 import OrderItems from "./OrderItems";
-
+import { Helmet } from "react-helmet";
 const Orders = () => {
   const { user } = useContext(AuthContext);
   const [orders, setOrders] = useState([]);
   useEffect(() => {
-    fetch(`http://localhost:5000/orders?email=${user?.email}`)
+    fetch(
+      `https://vehicle-doctor-server.vercel.app/orders?email=${user?.email}`
+    )
       .then((res) => res.json())
       .then((data) => setOrders(data));
   }, [user?.email]);
   const handleDelete = (id) => {
     const proceed = window.confirm(`are you sure you want to remove?`);
     if (proceed) {
-      fetch(`http://localhost:5000/orders/${id}`, {
+      fetch(`https://vehicle-doctor-server.vercel.app/orders/${id}`, {
         method: "DELETE",
       })
         .then((res) => res.json())
@@ -39,7 +41,7 @@ const Orders = () => {
     }
   };
   const handleOrderStatus = (id) => {
-    fetch(`http://localhost:5000/orders/${id}`, {
+    fetch(`https://vehicle-doctor-server.vercel.app/orders/${id}`, {
       method: "PATCH",
       headers: {
         "content-type": "application/json",
@@ -60,15 +62,19 @@ const Orders = () => {
   };
   return (
     <div>
-      <h3>Total {orders.length} orders</h3>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Orders</title>
+      </Helmet>
+      <h3 className="my-4 text-center">Total {orders.length} orders</h3>
       <div className="overflow-x-auto w-full">
         <table className="table w-full">
           <thead>
             <tr>
               <th></th>
+              <th>Items</th>
               <th>Name</th>
-              <th>Job</th>
-              <th>Favorite Color</th>
+              <th>Price</th>
               <th>Status</th>
             </tr>
           </thead>
@@ -88,16 +94,6 @@ const Orders = () => {
               ))
             )}
           </tbody>
-
-          <tfoot>
-            <tr>
-              <th></th>
-              <th>Name</th>
-              <th>Job</th>
-              <th>Favorite Color</th>
-              <th></th>
-            </tr>
-          </tfoot>
         </table>
       </div>
     </div>

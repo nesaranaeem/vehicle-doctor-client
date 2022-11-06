@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ServiceCard from "../Home/Home/Services/ServiceCard";
-
+import { Helmet } from "react-helmet";
 const Shop = () => {
   const [services, setServices] = useState([]);
   const [count, setCount] = useState(0);
@@ -9,7 +9,9 @@ const Shop = () => {
   // const perPage = 3;
   const pages = Math.ceil(count / pageSize);
   useEffect(() => {
-    fetch(`http://localhost:5000/shop?page=${currentPage}&size=${pageSize}`)
+    fetch(
+      `https://vehicle-doctor-server.vercel.app/shop?page=${currentPage}&size=${pageSize}`
+    )
       .then((res) => res.json())
       .then((data) => {
         setServices(data.services);
@@ -21,6 +23,10 @@ const Shop = () => {
 
   return (
     <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Shop</title>
+      </Helmet>
       <div className="grid justify-items-center gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {services.map((service) => (
           <ServiceCard key={service._id} service={service}></ServiceCard>

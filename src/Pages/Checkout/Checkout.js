@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { json, useLoaderData } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthProvider/AuthProvider";
 import { toast } from "react-toastify";
+import { Helmet } from "react-helmet";
 const Checkout = () => {
   const { _id, title, price } = useLoaderData();
   const { user } = useContext(AuthContext);
@@ -23,7 +24,7 @@ const Checkout = () => {
       phoneNumber: phoneNumber,
       notes: notes,
     };
-    fetch("http://localhost:5000/orders", {
+    fetch("https://vehicle-doctor-server.vercel.app/orders", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -50,6 +51,10 @@ const Checkout = () => {
   };
   return (
     <div>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Checkout - {title}</title>
+      </Helmet>
       <form onSubmit={handlePlaceOrder}>
         <h4 className="text-4xl">{title}</h4>
         <h4 className="text-3xl">{price}</h4>
