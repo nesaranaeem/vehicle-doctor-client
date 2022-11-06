@@ -28,6 +28,7 @@ const SignUp = () => {
         updateName(name, photoURL).then(() => {
           setUser({ ...user, displayName: name, photoURL });
         });
+
         toast("Signup Success", {
           position: "top-center",
           autoClose: 5000,

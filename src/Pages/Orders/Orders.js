@@ -8,16 +8,18 @@ const Orders = () => {
   const { user } = useContext(AuthContext);
   const [orders, setOrders] = useState([]);
   useEffect(() => {
-    fetch(
-      `https://vehicle-doctor-server.vercel.app/orders?email=${user?.email}`
-    )
+    fetch(`http://localhost:5000/orders?email=${user?.email}`, {
+      headers: {
+        authorization: `Bearer ${localStorage.getItem("vehicle-doctor-token")}`,
+      },
+    })
       .then((res) => res.json())
       .then((data) => setOrders(data));
   }, [user?.email]);
   const handleDelete = (id) => {
     const proceed = window.confirm(`are you sure you want to remove?`);
     if (proceed) {
-      fetch(`https://vehicle-doctor-server.vercel.app/orders/${id}`, {
+      fetch(`http://localhost:5000/orders/${id}`, {
         method: "DELETE",
       })
         .then((res) => res.json())
@@ -41,7 +43,7 @@ const Orders = () => {
     }
   };
   const handleOrderStatus = (id) => {
-    fetch(`https://vehicle-doctor-server.vercel.app/orders/${id}`, {
+    fetch(`http://localhost:5000/orders/${id}`, {
       method: "PATCH",
       headers: {
         "content-type": "application/json",
