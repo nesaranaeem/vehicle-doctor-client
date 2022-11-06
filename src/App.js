@@ -3,7 +3,12 @@ import { router } from "./Router/Routes/Routes";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Helmet } from "react-helmet";
+import { themeChange } from "theme-change";
+import { useEffect } from "react";
 function App() {
+  useEffect(() => {
+    themeChange(false);
+  }, []);
   return (
     <div className="max-w-6xl mx-auto">
       <Helmet>

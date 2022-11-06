@@ -2,9 +2,10 @@ import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/logo.svg";
 import { AuthContext } from "../contexts/AuthProvider/AuthProvider";
-
+import "../App.css";
 const Header = () => {
   const { user, logOut } = useContext(AuthContext);
+  const createTheme = () => {};
 
   const menuItems = (
     <>
@@ -67,6 +68,15 @@ const Header = () => {
         <ul className="menu menu-horizontal p-0">{menuItems}</ul>
       </div>
       <div className="navbar-end">
+        <select className="gradientselect" data-choose-theme>
+          <option disabled value="">
+            Pick a theme
+          </option>
+          <option value="">Default</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+        </select>
+
         {user?.uid ? (
           <>
             <div className="dropdown dropdown-hover">

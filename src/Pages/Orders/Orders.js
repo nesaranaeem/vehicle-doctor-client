@@ -5,21 +5,31 @@ import { toast } from "react-toastify";
 import OrderItems from "./OrderItems";
 import { Helmet } from "react-helmet";
 const Orders = () => {
-  const { user } = useContext(AuthContext);
+  const { user, logOut } = useContext(AuthContext);
   const [orders, setOrders] = useState([]);
   useEffect(() => {
-    fetch(`http://localhost:5000/orders?email=${user?.email}`, {
-      headers: {
-        authorization: `Bearer ${localStorage.getItem("vehicle-doctor-token")}`,
-      },
-    })
-      .then((res) => res.json())
+    fetch(
+      `https://vehicle-doctor-server.vercel.app/orders?email=${user?.email}`,
+      {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem(
+            "vehicle-doctor-token"
+          )}`,
+        },
+      }
+    )
+      .then((res) => {
+        if (res.status === 401 || res.status === 403) {
+          return logOut();
+        }
+        return res.json();
+      })
       .then((data) => setOrders(data));
-  }, [user?.email]);
+  }, [user?.email, logOut]);
   const handleDelete = (id) => {
     const proceed = window.confirm(`are you sure you want to remove?`);
     if (proceed) {
-      fetch(`http://localhost:5000/orders/${id}`, {
+      fetch(`https://vehicle-doctor-server.vercel.app/orders/${id}`, {
         method: "DELETE",
       })
         .then((res) => res.json())
@@ -43,7 +53,7 @@ const Orders = () => {
     }
   };
   const handleOrderStatus = (id) => {
-    fetch(`http://localhost:5000/orders/${id}`, {
+    fetch(`https://vehicle-doctor-server.vercel.app/orders/${id}`, {
       method: "PATCH",
       headers: {
         "content-type": "application/json",

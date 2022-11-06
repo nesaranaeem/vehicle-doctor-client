@@ -34,7 +34,7 @@ const AuthProvider = ({ children }) => {
     });
   };
   const logOut = () => {
-    setLoading(true);
+    localStorage.removeItem("vehicle-doctor-token");
     return signOut(auth);
   };
   useEffect(() => {

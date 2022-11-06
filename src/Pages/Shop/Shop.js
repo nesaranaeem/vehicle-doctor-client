@@ -9,7 +9,9 @@ const Shop = () => {
   // const perPage = 3;
   const pages = Math.ceil(count / pageSize);
   useEffect(() => {
-    fetch(`http://localhost:5000/shop?page=${currentPage}&size=${pageSize}`)
+    fetch(
+      `https://vehicle-doctor-server.vercel.app/shop?page=${currentPage}&size=${pageSize}`
+    )
       .then((res) => res.json())
       .then((data) => {
         setServices(data.services);
